@@ -1,0 +1,75 @@
+//ask for help about i and count
+
+
+ArrayList<experience>theMasses=new ArrayList<experience>();
+
+void setup() {
+  size(700, 600);
+  colorMode(HSB, 360, 100, 100);
+}
+
+
+void draw() {
+  if (mousePressed&&theMasses.size()<78) {
+    theMasses.add(new experience());
+  }
+  background(0);
+  for (int i=theMasses.size ()-1; i>=0; i--) {
+    experience theNow=theMasses.get(i);
+    theNow.show();
+    theNow.go();
+    if (theNow.isGone()) {
+      theMasses.remove(i);
+    }
+  }
+}
+
+class experience {
+  int count=78;
+  PVector loc;
+  PVector vel;
+  PVector acc;
+  float sz;
+  int minsz=2;
+  int maxsz=18;
+  PImage img;
+
+  experience() {
+
+    float r=random(1.2);
+    if (r<.2) {
+      img=loadImage("asteroids.png");
+    } else if (r<.4) {
+      img=loadImage("blueplanet.png");
+    } else if (r<.6) {
+      img=loadImage("earth.png");
+    } else if (r<.8) {
+      img=loadImage("moon.png");
+    } else if (r<1) {
+      img=loadImage("redplanet.png");
+    } else {
+      img=loadImage("sun.png");
+    }
+
+    loc=new PVector(random(width), random(height));
+    vel=new PVector(random(-4, 4), random(-2, 5));
+    sz=random(minsz, maxsz);
+  }
+
+  void show() {
+    image(img, loc.x, loc.y, sz, sz);
+    fill(255);
+  }
+
+  void go() {
+    loc.add(vel);
+  }
+
+  boolean isGone() {
+    if (loc.y-sz/2>height||loc.y+sz/2<0||loc.x+sz/2<0||loc.x-sz/2>width) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
