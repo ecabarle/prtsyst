@@ -1,0 +1,141 @@
+
+//name arrays
+ArrayList<experience>theMasses=new ArrayList<experience>();
+ArrayList<star>Space=new ArrayList<star>();
+
+void setup() {
+  size(700, 600);
+  colorMode(HSB, 360, 100, 100);
+}
+
+
+void draw() {
+  background(0);
+  
+  //when to add/subtract planets n stuff
+  if (mousePressed&&theMasses.size()<78) {
+    theMasses.add(new experience());
+  }
+  for (int i=theMasses.size ()-1; i>=0; i--) {
+    experience theNow=theMasses.get(i);
+    theNow.show();
+    theNow.go();
+    if (theNow.isGone()) {
+      theMasses.remove(i);
+    }
+  }
+  
+  //when to add/subtract stars
+  if (Space.size()<500) {
+    Space.add(new star());
+  }
+  for (int i=Space.size ()-1; i>=0; i--) {
+    star Current=Space.get(i);
+    Current.show();
+    Current.go();
+    if (Current.isGone()) {
+      Space.remove(i);
+    }
+  }
+}
+
+//create class for planets n stuff
+class experience {
+  
+  //declare the variables
+  int count=78;
+  PVector loc;
+  PVector vel;
+  PVector acc;
+  float sz;
+  int minsz=2;
+  int maxsz=18;
+  PImage img;
+
+  //properties
+  experience() {
+    
+    //when to add a particular image
+    float r=random(1.2);
+    if (r<.2) {
+      img=loadImage("asteroids.png");
+    } else if (r<.4) {
+      img=loadImage("blueplanet.png");
+    } else if (r<.6) {
+      img=loadImage("earth.png");
+    } else if (r<.8) {
+      img=loadImage("moon.png");
+    } else if (r<1) {
+      img=loadImage("redplanet.png");
+    } else {
+      img=loadImage("sun.png");
+    }
+    
+    //where they go, how they move, size
+    loc=new PVector(random(width), random(height));
+    vel=new PVector(random(-4, 4), random(-2, 5));
+    sz=random(minsz, maxsz);
+  }
+ 
+  //make it appear
+  void show() {
+    image(img, loc.x, loc.y, sz, sz);
+    fill(255);
+  }
+  
+  //make it move
+  void go() {
+    loc.add(vel);
+  }
+  
+  //eliminate lag (kill particles when they disappear)
+  boolean isGone() {
+    if (loc.y-sz/2>height||loc.y+sz/2<0||loc.x+sz/2<0||loc.x-sz/2>width) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+class star {
+  
+  //declare the variables
+  int count=500;
+  PVector loc;
+  PVector vel;
+  float sz;
+  float minsz=.1;
+  int maxsz=2;
+  PImage img;
+
+  star() {
+   
+    //add image and its loc, vel, sz
+    img=loadImage("star.png");
+
+    loc=new PVector(random(width), random(height));
+    vel=new PVector(4, 3);
+    sz=random(minsz, maxsz);
+  }
+
+//make stars appear
+  void show() {
+    image(img, loc.x, loc.y, sz, sz);
+    fill(255);
+  }
+  
+  //make stars move
+  void go() {
+    loc.add(vel);
+  }
+  
+  //eliminate lag again (same method)
+  boolean isGone() {
+    if (loc.y-sz/2>height||loc.y+sz/2<0||loc.x+sz/2<0||loc.x-sz/2>width) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
